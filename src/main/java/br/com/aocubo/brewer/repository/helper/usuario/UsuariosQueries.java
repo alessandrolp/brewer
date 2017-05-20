@@ -2,6 +2,7 @@ package br.com.aocubo.brewer.repository.helper.usuario;
 
 import br.com.aocubo.brewer.model.Usuario;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -10,5 +11,7 @@ import java.util.Optional;
 public interface UsuariosQueries {
 
     Optional<Usuario> getEmailEAtivo(String email);
+
+    List<String> getPermissoes(Usuario usuario);
 
 }

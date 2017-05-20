@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 
 @Controller
-public class LoginController {
+public class SegurancaController {
 
     @GetMapping("/login")
     public String autenticar(@AuthenticationPrincipal User user){
@@ -18,6 +18,11 @@ public class LoginController {
             return "redirect:/cervejas";
         }
         return "Login";
+    }
+
+    @GetMapping("/403")
+    public String acessoNegado(){
+        return "/403";
     }
 
 }
