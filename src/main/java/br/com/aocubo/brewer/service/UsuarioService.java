@@ -2,6 +2,7 @@ package br.com.aocubo.brewer.service;
 
 import br.com.aocubo.brewer.model.Usuario;
 import br.com.aocubo.brewer.repository.Usuarios;
+import br.com.aocubo.brewer.repository.filter.UsuarioFilter;
 import br.com.aocubo.brewer.service.exception.EmailCadastradoException;
 import br.com.aocubo.brewer.service.exception.SenhaObrigatoriaException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,10 @@ public class UsuarioService {
 
     public List<Usuario> buscarTodos(){
         return usuarioRepository.findAll();
+    }
+
+    public List<Usuario> filtrar(UsuarioFilter usuarioFilter){
+        return usuarioRepository.filtrar(usuarioFilter);
     }
 
     public void deletar(Long id){
