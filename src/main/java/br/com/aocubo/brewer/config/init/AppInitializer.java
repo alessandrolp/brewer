@@ -4,7 +4,6 @@ import br.com.aocubo.brewer.config.JpaConfig;
 import br.com.aocubo.brewer.config.SecurityConfig;
 import br.com.aocubo.brewer.config.ServiceConfig;
 import br.com.aocubo.brewer.config.WebConfig;
-import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.Filter;
@@ -30,11 +29,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
     @Override
     protected Filter[] getServletFilters() {
-        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-        characterEncodingFilter.setEncoding("UTF-8");
-        characterEncodingFilter.setForceEncoding(true);
-
-        return new Filter[] { characterEncodingFilter };
+        return new Filter[] { };
     }
 
     @Override
