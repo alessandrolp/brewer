@@ -24,7 +24,7 @@
 
         <div class="container-fluid">
 
-            <form method="post" th:object="${usuario}" class="form-vertical  js-form-loading">
+            <form method="post" th:object="${usuario}" class="form-vertical  js-form-loading" th:action="@{/usuarios/novo}">
                 <brewer:message/>
 
                 <div class="row">
