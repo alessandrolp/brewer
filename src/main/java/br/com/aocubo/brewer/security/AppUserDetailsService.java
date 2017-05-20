@@ -5,7 +5,6 @@ import br.com.aocubo.brewer.repository.Usuarios;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,7 +26,7 @@ public class AppUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Usuario> usuarioOptional = usuarioRepository.getEmailEAtivo(email);
         Usuario usuario = usuarioOptional.orElseThrow(() -> new UsernameNotFoundException("usuario e/ou senha incorreto"));
-        return new User(usuario.getEmail(), usuario.getSenha(), getPermissao(usuario));
+        return new UsuarioSistema(usuario, getPermissao(usuario));
     }
 
     private Collection<? extends GrantedAuthority> getPermissao(Usuario usuario) {
