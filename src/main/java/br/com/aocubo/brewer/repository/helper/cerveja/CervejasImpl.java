@@ -1,5 +1,6 @@
 package br.com.aocubo.brewer.repository.helper.cerveja;
 
+import br.com.aocubo.brewer.dto.CervejaDTO;
 import br.com.aocubo.brewer.model.Cerveja;
 import br.com.aocubo.brewer.repository.filter.CervejaFilter;
 import br.com.aocubo.brewer.repository.paginacao.PaginacaoUtil;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 /**
  * Created by alessandro on 20/04/17.
@@ -39,6 +41,16 @@ public class CervejasImpl implements CervejasQueries {
         adicionarFiltro(filtro, criteria);
 
         return new PageImpl<>(criteria.list(), pageable, total(filtro));
+    }
+
+    @Override
+    public List<CervejaDTO> buscaPorSkuOuNome(String skuOuNome) {
+        String jpql = "select new br.com.aocubo.brewer.dto.CervejaDTO(id, sku, nome, origem, valor, foto) " +
+                "from Cerveja where lower(sku) like lower(:skuOuNome) or lower(nome) like lower(:skuOuNome)";
+        List<CervejaDTO> cervejasFiltradas = manager.createQuery(jpql, CervejaDTO.class)
+                .setParameter("skuOuNome", skuOuNome + "%")
+                .getResultList();
+        return cervejasFiltradas;
     }
 
     private Long total(CervejaFilter filtro) {

@@ -1,20 +1,18 @@
 var Brewer = Brewer || {};
 
-Brewer.EstiloCadastroRapido = (function () {
+Brewer.EstiloCadastroRapido = (function() {
 
     function EstiloCadastroRapido() {
         this.modal = $('#modalCadastroRapidoEstilo');
-        this.botaoSalvar = this.modal.find('.js-modal-cadastrorapido-estilo-botao');
+        this.botaoSalvar = this.modal.find('.js-modal-cadastro-estilo-salvar-btn');
         this.form = this.modal.find('form');
         this.url = this.form.attr('action');
         this.inputNomeEstilo = $('#nomeEstilo');
-        this.containerMensagemErro = $('.js-mensagem-cadastrorapido-estilo');
+        this.containerMensagemErro = $('.js-mensagem-cadastro-rapido-estilo');
     }
 
-    EstiloCadastroRapido.prototype.iniciar = function () {
-        this.form.on('submit', function (event) {
-            event.preventDefault()
-        });
+    EstiloCadastroRapido.prototype.iniciar = function() {
+        this.form.on('submit', function(event) { event.preventDefault() });
         this.modal.on('shown.bs.modal', onModalShow.bind(this));
         this.modal.on('hide.bs.modal', onModalClose.bind(this))
         this.botaoSalvar.on('click', onBotaoSalvarClick.bind(this));
@@ -36,7 +34,7 @@ Brewer.EstiloCadastroRapido = (function () {
             url: this.url,
             method: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({nome: nomeEstilo}),
+            data: JSON.stringify({ nome: nomeEstilo }),
             error: onErroSalvandoEstilo.bind(this),
             success: onEstiloSalvo.bind(this)
         });
@@ -51,8 +49,8 @@ Brewer.EstiloCadastroRapido = (function () {
 
     function onEstiloSalvo(estilo) {
         var comboEstilo = $('#estilo');
-        comboEstilo.append('<option value=' + estilo.id + '>' + estilo.nome + '</option>');
-        comboEstilo.val(estilo.id);
+        comboEstilo.append('<option value=' + estilo.codigo + '>' + estilo.nome + '</option>');
+        comboEstilo.val(estilo.codigo);
         this.modal.modal('hide');
     }
 
@@ -60,7 +58,7 @@ Brewer.EstiloCadastroRapido = (function () {
 
 }());
 
-$(function () {
+$(function() {
     var estiloCadastroRapido = new Brewer.EstiloCadastroRapido();
     estiloCadastroRapido.iniciar();
 });
