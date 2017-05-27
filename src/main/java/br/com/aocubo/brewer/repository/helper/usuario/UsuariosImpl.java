@@ -1,13 +1,21 @@
 package br.com.aocubo.brewer.repository.helper.usuario;
 
+import br.com.aocubo.brewer.model.Cerveja;
 import br.com.aocubo.brewer.model.Grupo;
 import br.com.aocubo.brewer.model.Usuario;
 import br.com.aocubo.brewer.model.UsuarioGrupo;
+import br.com.aocubo.brewer.repository.filter.CervejaFilter;
 import br.com.aocubo.brewer.repository.filter.UsuarioFilter;
+import br.com.aocubo.brewer.repository.paginacao.PaginacaoUtil;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.criterion.*;
 import org.hibernate.sql.JoinType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -24,6 +32,9 @@ public class UsuariosImpl implements UsuariosQueries {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    private PaginacaoUtil paginacaoUtil;
 
     @Override
     public Optional<Usuario> getEmailEAtivo(String email) {
@@ -43,11 +54,22 @@ public class UsuariosImpl implements UsuariosQueries {
     @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
-    public List<Usuario> filtrar(UsuarioFilter usuarioFilter) {
+    public Page<Usuario> filtrar(UsuarioFilter usuarioFilter, Pageable pageable) {
         Criteria criteria = entityManager.unwrap(Session.class).createCriteria(Usuario.class);
-        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+        paginacaoUtil.preparar(criteria, pageable);
         adicionarFiltro(usuarioFilter, criteria);
-        return criteria.list();
+
+        List<Usuario> filtrados = criteria.list();
+        filtrados.forEach(u -> Hibernate.initialize(u.getGrupos()));
+        return new PageImpl<>(filtrados, pageable, total(usuarioFilter));
+    }
+
+    private Long total(UsuarioFilter usuarioFilter) {
+        Criteria criteria = entityManager.unwrap(Session.class).createCriteria(Usuario.class);
+        adicionarFiltro(usuarioFilter, criteria);
+        criteria.setProjection(Projections.rowCount());
+        return (Long) criteria.uniqueResult();
     }
 
     private void adicionarFiltro(UsuarioFilter usuarioFilter, Criteria criteria) {
@@ -58,7 +80,6 @@ public class UsuariosImpl implements UsuariosQueries {
             if(!StringUtils.isEmpty(usuarioFilter.getEmail())){
                 criteria.add(Restrictions.ilike("email", usuarioFilter.getEmail(), MatchMode.START));
             }
-            criteria.createAlias("grupos", "g", JoinType.LEFT_OUTER_JOIN);
             if(usuarioFilter.getGrupos() != null && !usuarioFilter.getGrupos().isEmpty()){
                 List<Criterion> subqueries = new ArrayList<>();
                 for(Long idGrupo : usuarioFilter.getGrupos().stream().mapToLong(Grupo::getId).toArray()){

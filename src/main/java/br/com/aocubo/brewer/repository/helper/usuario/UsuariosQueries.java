@@ -2,6 +2,8 @@ package br.com.aocubo.brewer.repository.helper.usuario;
 
 import br.com.aocubo.brewer.model.Usuario;
 import br.com.aocubo.brewer.repository.filter.UsuarioFilter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +17,6 @@ public interface UsuariosQueries {
 
     List<String> getPermissoes(Usuario usuario);
 
-    List<Usuario> filtrar(UsuarioFilter usuarioFilter);
+    Page<Usuario> filtrar(UsuarioFilter usuarioFilter, Pageable pageable);
 
 }

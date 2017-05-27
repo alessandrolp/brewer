@@ -6,6 +6,8 @@ import br.com.aocubo.brewer.repository.filter.UsuarioFilter;
 import br.com.aocubo.brewer.service.exception.EmailCadastradoException;
 import br.com.aocubo.brewer.service.exception.SenhaObrigatoriaException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,12 +49,16 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public List<Usuario> filtrar(UsuarioFilter usuarioFilter){
-        return usuarioRepository.filtrar(usuarioFilter);
+    public Page<Usuario> filtrar(UsuarioFilter usuarioFilter, Pageable pageable){
+        return usuarioRepository.filtrar(usuarioFilter, pageable);
     }
 
     public void deletar(Long id){
         usuarioRepository.delete(usuarioRepository.findOne(id));
     }
 
+    @Transactional
+    public void alterarStatus(Long[] codigos, StatusUsuario statusUsuario) {
+        statusUsuario.executar(codigos, usuarioRepository);
+    }
 }

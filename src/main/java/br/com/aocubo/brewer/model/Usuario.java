@@ -1,6 +1,7 @@
 package br.com.aocubo.brewer.model;
 
 import br.com.aocubo.brewer.validation.AtributoConfirmacao;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @AtributoConfirmacao(atributo = "senha", atributoConfirmacao = "confirmacaoSenha", message = "Confirmação de senha não confere.")
 @Entity
 @Table(name = "usuario")
+@DynamicUpdate
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,6 +50,11 @@ public class Usuario implements Serializable {
             joinColumns = @JoinColumn(name = "id_usuario"),
             inverseJoinColumns = @JoinColumn(name = "id_grupo"))
     private List<Grupo> grupos;
+
+    @PreUpdate
+    private void preUpdate(){
+        this.confirmacaoSenha = senha;
+    }
 
     public boolean isNovo(){
         return getId() == null;
