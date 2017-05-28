@@ -5,6 +5,7 @@ import br.com.aocubo.brewer.controller.converter.CidadeConverter;
 import br.com.aocubo.brewer.controller.converter.EstadoConverter;
 import br.com.aocubo.brewer.controller.converter.EstiloConverter;
 import br.com.aocubo.brewer.controller.converter.GrupoConverter;
+import br.com.aocubo.brewer.session.TabelaItensVenda;
 import br.com.aocubo.brewer.thymeleaf.BrewerDialect;
 import com.github.mxab.thymeleaf.extras.dataattribute.dialect.DataAttributeDialect;
 import com.google.common.cache.CacheBuilder;
@@ -45,7 +46,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-@ComponentScan(basePackageClasses = { CervejasController.class })
+@ComponentScan(basePackageClasses = { CervejasController.class, TabelaItensVenda.class })
 @EnableWebMvc
 @EnableSpringDataWebSupport
 @EnableCaching
