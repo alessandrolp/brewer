@@ -2,6 +2,7 @@ package br.com.aocubo.brewer.model;
 
 import br.com.aocubo.brewer.validation.SKU;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
@@ -158,6 +159,10 @@ public class Cerveja implements Serializable {
 
     public String getFoto() {
         return foto;
+    }
+
+    public String getFotoOuMock(){
+        return !StringUtils.isEmpty(foto) ? foto : "cerveja-mock.png";
     }
 
     public void setFoto(String foto) {

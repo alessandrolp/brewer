@@ -12,4 +12,8 @@ public interface FotoStorage {
 
     byte[] recuperarFotoTemporaria(String nome);
 
+    void salvar(String foto);
+
+    byte[] recuperar(String foto);
+
 }

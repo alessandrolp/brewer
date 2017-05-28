@@ -59,6 +59,10 @@
 
 		<!-- Thymeleaf - Extras Spring Security -->
 		<thymeleaf-extras-springsecurity.version>3.0.0.RELEASE</thymeleaf-extras-springsecurity.version>
+
+		<!-- thumbnailator - Gerar Thumbnail -->
+		<!-- https://github.com/coobird/thumbnailator -->
+		<thumbnailator.version>0.4.8</thumbnailator.version>
 	</properties>
 
 	<build>
@@ -259,6 +263,14 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>${commons-beanutils.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- thumbnailator - Gerar Thumbnail -->
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>${thumbnailator.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
