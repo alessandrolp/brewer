@@ -23,19 +23,20 @@ public class TabelaItensVenda {
     public BigDecimal getValorTotal(){
         return itens.stream().map(ItemVenda::getValorTotal).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
 
-        /* OUTRA FORMA DE FAZER O CALCULO
+        /* ====================== OUTRA FORMA DE FAZER O CALCULO ========================
         BigDecimal total = new BigDecimal(0);
-        for(ItemVenda itemVendas : itens){
-            total = total.add(itemVendas.getValorTotal());
+        for(ItemVenda item : itens){
+            total = total.add(item.getValorTotal());
         }
         return total;
-        */
+        ================================================================================= */
     }
 
     public void adicionarItem(Cerveja cerveja, Integer quantidade){
         Optional<ItemVenda> itemVendaOptional = itens.stream().filter(i -> i.getCerveja().equals(cerveja)).findAny();
 
         ItemVenda itemVenda = null;
+
         if(itemVendaOptional.isPresent()){
             itemVenda = itemVendaOptional.get();
             itemVenda.setQuantidade(itemVenda.getQuantidade() + quantidade);
@@ -46,6 +47,23 @@ public class TabelaItensVenda {
             itemVenda.setValorUnitario(cerveja.getValor());
             itens.add(0, itemVenda);
         }
+        /* ===================== OUTRA FORMA DE FAZER ============================
+        for(ItemVenda item : itens){
+            if(item.getCerveja().equals(cerveja)){
+                itemVenda = item;
+            }
+        }
+
+        if(itemVenda == null){
+            itemVenda = new ItemVenda();
+            itemVenda.setCerveja(cerveja);
+            itemVenda.setQuantidade(quantidade);
+            itemVenda.setValorUnitario(cerveja.getValor());
+            itens.add(0, itemVenda);
+        } else {
+            itemVenda.setQuantidade(itemVenda.getQuantidade() + quantidade);
+        }
+        =========================================================================== */
     }
 
     public int getTotal(){
